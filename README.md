@@ -162,6 +162,16 @@ The task will run daily at 9 AM and:
 - If changed from last-known IP, update Cloudflare DNS records
 - Log results to console (viewable in Task Scheduler history)
 
+**Troubleshooting:**
+
+If import fails with XML errors:
+1. Use **Option A** above (batch file method - easiest)
+2. Or create task manually via GUI (Task Scheduler → Create Task → Actions tab → browse to `daily-renewal.cmd`)
+3. Or run PowerShell directly as Administrator:
+   ```powershell
+   Register-ScheduledTask -Action (New-ScheduledTaskAction -Execute "C:\Program Files\nodejs\node.exe" -Argument '"C:\apps\cloudflareDNSRenew\dist\index.js" "--config" "C:\apps\cloudflareDNSRenew\config.local.json"') -Trigger (New-ScheduledTaskTrigger -Daily -At 9am) -Principal (New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest) -TaskName "Cloudflare DNS Renewal" -Force
+   ```
+
 ## Testing Before Deployment
 
 ### 1. Test Cloudflare Connection

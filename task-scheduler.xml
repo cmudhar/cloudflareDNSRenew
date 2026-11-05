@@ -3,7 +3,7 @@
   <RegistrationInfo>
     <Date>2026-11-05T09:00:00</Date>
     <Author>Administrator</Author>
-    <Description>Daily Cloudflare DNS renewal check at 9 AM</Description>
+    <Description>Daily Cloudflare DNS renewal at 9 AM</Description>
   </RegistrationInfo>
   <Triggers>
     <CalendarTrigger>
@@ -12,10 +12,6 @@
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>
-      <ScheduleByHour>
-        <Hours>9</Hours>
-        <Minutes>0</Minutes>
-      </ScheduleByHour>
     </CalendarTrigger>
   </Triggers>
   <Principals>
@@ -38,11 +34,9 @@
     <AllowStartOnDemand>true</AllowStartOnDemand>
     <Enabled>true</Enabled>
     <Hidden>false</Hidden>
-    <RunOnlyIfIdle>false</RunOnlyIfIdle>
-    <WakeToRun>false</WakeToRun>
     <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>
   </Settings>
-  <Actions Context="Author">
+  <Actions>
     <Exec>
       <Command>C:\Program Files\nodejs\node.exe</Command>
       <Arguments>"C:\apps\cloudflareDNSRenew\dist\index.js" "--config" "C:\apps\cloudflareDNSRenew\config.local.json"</Arguments>

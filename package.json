@@ -1,15 +1,27 @@
 {
   "name": "cloudflarednsrenew",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Cloudflare DNS IP Renewal Application",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && node cjs-fix.cjs",
+    "start": "node dist/index.js",
+    "test:record": "node dist/test.js"
   },
-  "keywords": [],
+  "keywords": [
+    "cloudflare",
+    "dns",
+    "ip",
+    "renewal"
+  ],
+  "author": "chara",
   "type": "commonjs",
   "devDependencies": {
-    "@types/node": "^26.6.6",
-    "typescript": "^7.0.2"
+    "@types/axios": "^0.9.36",
+    "@types/node": "^20.19.43",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "axios": "^1.21.0"
   }
 }

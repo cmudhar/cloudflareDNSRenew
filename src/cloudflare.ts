@@ -149,6 +149,68 @@ export class CloudflareDnsUpdater {
     }
   }
 
+  async updateAllARecords(newIp: string): Promise<{ updated: number; unchanged: number; errors: number }> {
+    const zoneId = await this.getZoneId();
+
+    try {
+      const response = await axios.get<{ success: boolean; result?: DnsRecord[]; errors?: any[] }>(
+        `${this.baseUrl}/zones/${zoneId}/dns_records`,
+        {
+          headers: this.getAuthHeaders(),
+          params: { type: 'A', per_page: 100 },
+        }
+      );
+
+      if (!response.data.success || !response.data.result) {
+        throw new Error('Failed to fetch A records');
+      }
+
+      let updated = 0;
+      let unchanged = 0;
+      let errors = 0;
+
+      for (const record of response.data.result) {
+        if (!record.content) continue;
+
+        if (record.content === newIp) {
+          unchanged++;
+          continue;
+        }
+
+        try {
+          const updateResponse = await axios.patch<CloudflareApiResponse<DnsRecord>>(
+            `${this.baseUrl}/zones/${zoneId}/dns_records/${record.id}`,
+            {
+              name: record.name,
+              type: 'A',
+              content: newIp,
+              proxied: record.proxied,
+              ttl: record.ttl,
+            },
+            { headers: this.getAuthHeaders() }
+          );
+
+          if (updateResponse.data.success) {
+            console.log(`Updated ${record.name} from ${record.content} to ${newIp}`);
+            updated++;
+          } else {
+            errors++;
+          }
+        } catch (err: any) {
+          console.error(`Failed to update ${record.name}: ${err.message}`);
+          errors++;
+        }
+      }
+
+      return { updated, unchanged, errors };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(`Failed to update A records: ${error.message}`);
+      }
+      throw error;
+    }
+  }
+
   async deleteDnsRecord(recordId: string): Promise<boolean> {
     const zoneId = await this.getZoneId();
 

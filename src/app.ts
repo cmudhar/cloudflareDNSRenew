@@ -62,52 +62,20 @@ export class DnsRenewalApp {
 
       console.log(`IP changed from ${this.config.lastKnownIp || 'N/A'} to ${currentIp}`);
 
-      const zoneId = await this.dnsUpdater.getZoneId();
-      console.log(`Zone ID: ${zoneId}`);
-
-      let recordFound = false;
-
-      for (const recordConfig of this.config.cloudflare.dnsRecords) {
-        try {
-          if (recordConfig.id) {
-            const updated = await this.dnsUpdater.updateDnsRecord(
-              recordConfig.id,
-              recordConfig.name,
-              currentIp
-            );
-            if (updated) {
-              recordFound = true;
-            }
-          } else {
-            // Find record by name
-            const records = await this.dnsUpdater.getDnsRecords();
-            const matchingRecord = records.find(
-              r => r.name === recordConfig.name && r.type === recordConfig.type
-            );
-
-            if (matchingRecord) {
-              const updated = await this.dnsUpdater.updateDnsRecord(
-                matchingRecord.id!,
-                recordConfig.name,
-                currentIp
-              );
-              if (updated) {
-                recordFound = true;
-              }
-            } else {
-              console.log(`No matching DNS record found for: ${recordConfig.name}`);
-            }
-          }
-        } catch (error) {
-          console.error(`Error updating record ${recordConfig.name}: ${error}`);
-        }
+      const results = await this.dnsUpdater.updateAllARecords(currentIp);
+      
+      console.log(`\nUpdate Summary:`);
+      console.log(`  Updated: ${results.updated} records`);
+      console.log(`  Unchanged: ${results.unchanged} records`);
+      if (results.errors > 0) {
+        console.log(`  Errors: ${results.errors}`);
       }
 
-      if (recordFound) {
+      if (results.updated > 0 || results.unchanged > 0) {
         await this.saveLastKnownIp(currentIp);
-        console.log('Successfully updated all DNS records.');
+        console.log('\nDNS update process completed.');
       } else {
-        console.warn('No DNS records were updated.');
+        console.warn('No DNS records were updated or found.');
       }
     } catch (error) {
       console.error(`DNS check/update failed: ${error}`);

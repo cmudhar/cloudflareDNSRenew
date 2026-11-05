@@ -1,7 +1,19 @@
-const axios = require('axios');
+import axios from 'axios';
 
-class IpFetcher {
-  constructor(serviceUrl, serviceName) {
+interface IpFetcherConfig {
+  serviceUrl: string;
+  name: string;
+}
+
+export interface Config {
+  serviceUrl: string;
+  name: string;
+}
+
+export class IpFetcher {
+  private config: IpFetcherConfig;
+
+  constructor(serviceUrl: string, serviceName: string) {
     this.config = { serviceUrl, name: serviceName };
   }
 
@@ -16,11 +28,9 @@ class IpFetcher {
       }
 
       throw new Error('Invalid response from IP service');
-    } catch (err) {
-      const error = axios.isAxiosError(err) ? err : new Error(String(err));
-      throw new Error(`Failed to fetch IP: ${error.message}`);
+    } catch (error: any) {
+      const err = axios.isAxiosError(error) ? error : new Error(String(error));
+      throw new Error(`Failed to fetch IP: ${err.message}`);
     }
   }
 }
-
-module.exports = { IpFetcher };

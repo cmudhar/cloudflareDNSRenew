@@ -1,4 +1,4 @@
-import { Config, IpFetcher } from './ipFetcher.js';
+import { IpFetcher, Config } from './ipFetcher.js';
 import { CloudflareDnsUpdater, CloudflareConfig } from './cloudflare.js';
 import * as fs from 'fs';
 

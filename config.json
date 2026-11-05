@@ -4,26 +4,19 @@
     "name": "ipify"
   },
   "cloudflare": {
-    "apiKey": "YOUR_CLOUDFLARE_API_KEY",
-    "email": "your.email@example.com",
-    "zoneId": "YOUR_ZONE_ID_OR_LEAVE_EMPTY_TO_AUTO_DISCOVER",
+    "apiKey": "cfut_109CYmXHOcZwyMwtSK6MzjLNiLsUWvlTOxnaMmfd5a446d32",
+    "email": "iammyownrealestateagent@iamorea.com",
+    "zoneId": "d1e5b835dd534eac2a0017600246d533",
     "dnsRecords": [
       {
-        "name": "yourdomain.com",
+        "name": "iamorea.com",
         "type": "A",
         "proxied": false,
         "ttl": 300,
-        "id": null 
+        "id": null
       }
     ]
   },
-  "lastKnownIp": "",
+  "lastKnownIp": "76.114.17.164",
   "logLevel": "info"
 }
-
-CONFIGURATION INSTRUCTIONS:
-1. Get your Cloudflare API Key: https://dash.cloudflare.com/profile/api-tokens
-2. Find your Zone ID: Go to Cloudflare Dashboard > website domain > General (copied from URL or settings)
-3. For dnsRecords.id: Leave as null - the app will auto-discover records by name. If you want to specify, provide the record ID.
-4. Replace example values with your actual credentials and DNS record names
-5. The first run will update all matching A records to your current public IP

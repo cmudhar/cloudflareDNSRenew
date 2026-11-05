@@ -168,9 +168,15 @@ export class CloudflareDnsUpdater {
       let updated = 0;
       let unchanged = 0;
       let errors = 0;
+      const recordsProcessed = response.data.result.length;
 
       for (const record of response.data.result) {
         if (!record.content) continue;
+        
+        if (record.type !== 'A') {
+          console.log(`Skipping non-A record: ${record.name} (${record.type})`);
+          continue;
+        }
 
         if (record.content === newIp) {
           unchanged++;
@@ -202,6 +208,7 @@ export class CloudflareDnsUpdater {
         }
       }
 
+      console.log(`Processed ${recordsProcessed} A DNS record(s). Only A records are updated.`);
       return { updated, unchanged, errors };
     } catch (error) {
       if (axios.isAxiosError(error)) {

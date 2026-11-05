@@ -121,32 +121,60 @@ node dist/index.js --config config.local.json
 
 ## Scheduling Daily Execution (Windows)
 
-1. Open **Task Scheduler** (`taskschd.msc`)
+**Option A: Using Task Scheduler GUI (Recommended)**
 
-2. Create a New Task:
-   - **General Tab**:
-     - Name: "Cloudflare DNS Renewal"
-     - Run with highest privileges
-     - Configure for: Windows 10/11
-   
-   - **Triggers Tab**:
-     - Click "New"
-     - Begin the task: "On a schedule"
-     - Daily at: `09:00` (9 AM)
-   
-   - **Actions Tab**:
-     - Click "New"
-     - Action: "Start a program"
-     - Program/script: `C:\Program Files\nodejs\node.exe`
-     - Add arguments: `"C:\apps\cloudflareDNSRenew\dist\index.js" "--config" "C:\apps\cloudflareDNSRenew\config.local.json"`
-   
-   - **Conditions Tab**:
-     - Uncheck "Start the task only if the computer is on AC power" (if on laptop)
-   
-   - **Settings Tab**:
-     - Check "Allow task to be run on demand"
-     - Check "If the task fails, restart every: 1 minute"
-     - Set attempt count: 3
+1. Press `Win` key → type "Task Scheduler" → Right-click → **Run as administrator**
+2. Click **Create Task...** in the Action panel
+3. **General Tab:**
+   - Name: `Cloudflare DNS Renewal`
+   - Check "Run with highest privileges"
+   - Configure for: Windows 10/11
+
+4. **Triggers Tab** → New:
+   - Begin the task: On a schedule
+   - Daily, start time: `09:00`
+
+5. **Actions Tab** → New:
+   - Action: Start a program
+   - Program/script: `C:\Program Files\nodejs\node.exe`
+   - Add arguments: `"C:\apps\cloudflareDNSRenew\dist\index.js" "--config" "C:\apps\cloudflareDNSRenew\config.local.json"`
+
+6. **Constraints Tab:**
+   - Uncheck "Start only if on AC power" (if using laptop)
+
+7. **Settings Tab:**
+   - Check "Allow task to be run on demand"
+   - Set restart: 3 attempts, 1 minute interval
+
+**Option B: Using XML Import File**
+
+The file `task-scheduler.xml` has been generated with all settings pre-filled:
+
+1. Open Task Scheduler as administrator
+2. Click **Import Task...** in the Action panel
+3. Select `task-scheduler.xml` from this project directory
+4. Click OK to import
+
+**Option C: PowerShell (Run as Administrator)**
+
+```powershell
+$action = New-ScheduledTaskAction -Execute "C:\Program Files\nodejs\node.exe" -Argument '"C:\apps\cloudflareDNSRenew\dist\index.js" "--config" "C:\apps\cloudflareDNSRenew\config.local.json"'
+$trigger = New-ScheduledTaskTrigger -Daily -At 9am
+Register-ScheduledTask -TaskName "Cloudflare DNS Renewal" -Action $action -Trigger $trigger -RunLevel Highest -Force
+```
+
+**Verify the task was created:**
+
+```powershell
+Get-ScheduledTask | Where-Object {$_.TaskName -eq "Cloudflare DNS Renewal"} | Select TaskName, State
+```
+
+Expected output:
+```
+TaskName                       State
+--------                       -----
+Cloudflare DNS Renewal         Ready
+```
 
 ## Testing Before Deployment
 

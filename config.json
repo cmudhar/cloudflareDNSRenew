@@ -1,0 +1,21 @@
+{
+  "ipService": {
+    "endpoint": "https://api.ipify.org?format=json",
+    "name": "ipify"
+  },
+  "cloudflare": {
+    "apiKey": "YOUR_CLOUDFLARE_API_KEY",
+    "email": "your.email@example.com",
+    "zoneId": "YOUR_ZONE_ID",
+    "dnsRecords": [
+      {
+        "name": "test.yourdomain.com",
+        "type": "A",
+        "proxied": false,
+        "ttl": 300
+      }
+    ]
+  },
+  "lastKnownIp": "",
+  "logLevel": "info"
+}

@@ -1,0 +1,32 @@
+# Application Goal - Create an Application which renews DNS IP address on cloudflare 
+
+# use typescript as coding language 
+##analyze full request and let me know if any part of application is not achievable using typescript
+##add appropriate documentation to the code you generate
+
+# initialize application for git, commit the code at appropriate steps so we can rollback/undo any unnecessary changes or mistakes.
+ 
+## Task Find current public IP address
+1. get current public API address, find open source secured publicly available tools 
+2. show me the options
+3. I will confirm the tool
+4. using the approved tool find the public IP address
+5. make a NOTE of the IP address
+
+##store configurable entries information in ./config.json file
+
+## Task Update DNS entries to cloudflare platform
+
+1. using cloudflare API key make an API call to cloudlfare and update DNS records
+   
+ask me the required information to make api call
+keep the api key related information in ./config.json file
+
+2 test the code end to end to make sure you can update the DNS record, 
+create one test entry for "A" record and then try to update it.
+
+## once code verification testing is complete and production ready 
+- create a build and deploy script
+- execute build and deploy script and ask for deployment location
+
+# schedule the job from deployed location to run everyday 9 AM

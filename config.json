@@ -4,12 +4,12 @@
     "name": "ipify"
   },
   "cloudflare": {
-    "apiKey": "cfut_109CYmXHOcZwyMwtSK6MzjLNiLsUWvlTOxnaMmfd5a446d32",
-    "email": "iammyownrealestateagent@iamorea.com",
-    "zoneId": "d1e5b835dd534eac2a0017600246d533",
+    "apiKey": "${CLOUDFLARE_API_KEY}",
+    "email": "${CLOUDFLARE_EMAIL}",
+    "zoneId": "${CLOUDFLARE_ZONE_ID}",
     "dnsRecords": [
       {
-        "name": "iamorea.com",
+        "name": "${DNS_RECORD_NAME}",
         "type": "A",
         "proxied": false,
         "ttl": 300,
@@ -17,6 +17,6 @@
       }
     ]
   },
-  "lastKnownIp": "76.114.17.164",
+  "lastKnownIp": null,
   "logLevel": "info"
 }
